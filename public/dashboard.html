@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <title>Concordia</title>
+
+  <link rel="stylesheet" href="stylesheets/style.css"/>
+</head>
+
+<body>
+  Hello world
+  
+  <script src="scripts/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
+  <script>
+  $(function () {
+    var socket = io();
+    
+    socket.on('connect', function(){
+      console.log('connected');
+    });
+    
+    socket.on('phone-status', function(data){
+      console.log(data);
+    });
+    
+    socket.on('disconnect', function(){
+      console.log('disconnected');    
+    });
+  });
+</script>
+</body>
+</html>
