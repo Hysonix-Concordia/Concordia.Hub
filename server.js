@@ -16,9 +16,8 @@ io.on('connection', function(socket) {
     console.log('client connected');
 });
 
-http.createServer(function (req, res) {
-    
-    res.writeHead(200, { 'Content-Type': 'text/html' });
-    res.end('Hello, world!');
-    
-}).listen(process.env.PORT || 8080);
+
+app.listen(process.env.PORT, function () {
+  var addr = app.address();
+  console.log('   app listening on http://' + addr.address + ':' + addr.port);
+});
