@@ -16,6 +16,16 @@ io.on('connection', function(socket) {
     console.log('client connected');
 });
 
+app.post('/', function (req, res) {
+  messages = req.param('messages', { 'Messages': [] });
+  
+  phoneStatus.Messages = messages;
+  
+  io.emit('phone-status', { 'phone-status': phoneStatus });
+  
+  res.send('{Result: "successful"');
+});
+
 
 app.listen(process.env.PORT, function () {
   var addr = app.address();
