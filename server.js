@@ -1,5 +1,3 @@
-var http = require('http');
-
 var express = require('express'), 
     sio = require('socket.io')
     phoneStatus = require('./phone-utils.js');
@@ -27,7 +25,7 @@ app.post('/', function (req, res) {
 });
 
 
-app.listen(process.env.PORT, function () {
+app.listen(process.env.PORT || 3000, function () {
   var addr = app.address();
   console.log('   app listening on http://' + addr.address + ':' + addr.port);
 });
