@@ -26,8 +26,6 @@ io.on('connection', function(socket) {
 app.post('/', function (req, res) {
     var event = req.body;
 
-    phoneStatus.Messages = messages;
-
     io.emit('event', { "event": event });
 
     res.send('{Result: "successful"}');
