@@ -14,18 +14,27 @@ io.on('connection', function(socket) {
     console.log('client connected');
 });
 
+/*
+
+{
+    Type:  SMS, //CALL, EMAIL, etc.
+  
+}
+
+*/
+
 app.post('/', function (req, res) {
-  messages = req.param('messages', { 'Messages': [] });
-  
-  phoneStatus.Messages = messages;
-  
-  io.emit('phone-status', { 'phone-status': phoneStatus });
-  
-  res.send('{Result: "successful"');
+    var event = req.body;
+
+    phoneStatus.Messages = messages;
+
+    io.emit('event', { "event": event });
+
+    res.send('{Result: "successful"}');
 });
 
 
 app.listen(process.env.PORT || 3000, function () {
-  var addr = app.address();
-  console.log('   app listening on http://' + addr.address + ':' + addr.port);
+    var addr = app.address();
+    console.log('   app listening on http://' + addr.address + ':' + addr.port);
 });
