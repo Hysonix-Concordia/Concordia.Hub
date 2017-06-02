@@ -1,33 +1,124 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <title>Concordia</title>
-
-  <link rel="stylesheet" href="stylesheets/style.css"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+	<title>Concordia</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
+	<link rel="stylesheet" href="stylesheets/style.css"/>
 </head>
-
 <body>
-  Hello world
-  
-  <script src="scripts/socket.io.js"></script>
-  <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
-  <script>
-  $(function () {
-    var socket = io();
-    
-    socket.on('connect', function(){
-      console.log('connected');
-    });
-    
-    socket.on('event', function(data){
-      console.log(data);
-    });
-    
-    socket.on('disconnect', function(){
-      console.log('disconnected');    
-    });
-  });
+<div id="app">
+	<div id="wrapper">
+		<div id="page-wrapper">
+			<div class="container-fluid">
+				<div class="row">
+
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-messages">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-comments fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">{{ messages.length }}</div>
+										<div>New Messages</div>
+									</div>
+								</div>
+							</div>
+							<a href="#">
+								<div class="panel-footer">
+									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-6">
+						<div class="panel panel-weather">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-cloud fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">78&deg</div>
+										<div>Atlanta, GA</div>
+										<div>Low 58&deg | High 81&deg</div>
+										<div>Feels like 78&deg | Chance of rain 20%</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>	
+
+				<div class="row">
+
+					<div class="col-lg-3 col-md-6">
+						<div class="panel panel-calls">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-phone fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">{{ messages.length }}</div>
+										<div>Missed Calls</div>
+									</div>
+								</div>
+							</div>
+							<a href="#">
+								<div class="panel-footer">
+									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
+					</div>
+
+				</div>
+
+
+			</div>	
+		</div>
+	</div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.0/vue.js"></script>
+<script src="scripts/socket.io.js"></script>
+<script>
+	var app = new Vue({
+		el: '#app',
+		data: {
+			messages: [],
+			calls: [],
+			weather: {},
+			alerts: [],
+		}
+	});
+
+
+	document.addEventListener('DOMContentLoaded', function() {
+		var socket = io();
+
+		socket.on('connect', function(){
+			console.log('connected');
+		});
+
+		socket.on('event', function(data){
+			console.log(data);
+			if (data.event.Type == 'INCOMING') {
+				console.log(data.event.Source);
+			}
+		});
+
+		socket.on('disconnect', function(){
+			console.log('disconnected');    
+		});
+	});
 </script>
 </body>
 </html>

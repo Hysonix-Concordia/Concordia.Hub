@@ -14,23 +14,13 @@ io.on('connection', function(socket) {
     console.log('client connected');
 });
 
-/*
-
-{
-    Type:  SMS, //CALL, EMAIL, etc.
-  
-}
-
-*/
-
 app.post('/', function (req, res) {
     var event = req.body;
 
     io.emit('event', { "event": event });
 
-    res.send('{Result: "successful"}');
+    res.send('{"Result": "successful"}');
 });
-
 
 app.listen(process.env.PORT || 3000, function () {
     var addr = app.address();
