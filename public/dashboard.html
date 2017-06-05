@@ -34,6 +34,26 @@
 								</div>
 							</a>
 						</div>
+
+						<div class="panel panel-calls">
+							<div class="panel-heading">
+								<div class="row">
+									<div class="col-xs-3">
+										<i class="fa fa-phone fa-5x"></i>
+									</div>
+									<div class="col-xs-9 text-right">
+										<div class="huge">{{ messages.length }}</div>
+										<div>Missed Calls</div>
+									</div>
+								</div>
+							</div>
+							<a href="#">
+								<div class="panel-footer">
+									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+									<div class="clearfix"></div>
+								</div>
+							</a>
+						</div>
 					</div>
 
 					<div class="col-lg-4 col-md-6">
@@ -56,37 +76,21 @@
 
 				</div>	
 
-				<div class="row">
-
-					<div class="col-lg-3 col-md-6">
-						<div class="panel panel-calls">
-							<div class="panel-heading">
-								<div class="row">
-									<div class="col-xs-3">
-										<i class="fa fa-phone fa-5x"></i>
-									</div>
-									<div class="col-xs-9 text-right">
-										<div class="huge">{{ messages.length }}</div>
-										<div>Missed Calls</div>
-									</div>
-								</div>
-							</div>
-							<a href="#">
-								<div class="panel-footer">
-									<span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-									<div class="clearfix"></div>
-								</div>
-							</a>
-						</div>
-					</div>
-
-				</div>
-
 
 			</div>	
 		</div>
 	</div>
+
+
+	<!-- The Modal -->
+	<div id="incoming-alert" class="modal" v-if="alerts.length>0" v-on:click="closeIncomingAlertModal">
+		<div class="modal-content">
+			<span class="close" v-on:click="closeIncomingAlertModal">&times;</span>
+			<p>{{alerts[0].Type}} - {{alerts[0].Source}}</p>
+		</div>
+	</div>
 </div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.0/vue.js"></script>
 <script src="scripts/socket.io.js"></script>
 <script>
@@ -97,9 +101,13 @@
 			calls: [],
 			weather: {},
 			alerts: [],
+		},
+		methods: {
+			closeIncomingAlertModal: function () {
+				this.alerts = [];
+			}
 		}
 	});
-
 
 	document.addEventListener('DOMContentLoaded', function() {
 		var socket = io();
@@ -111,7 +119,8 @@
 		socket.on('event', function(data){
 			console.log(data);
 			if (data.event.Type == 'INCOMING') {
-				console.log(data.event.Source);
+				app.alerts.push(data.event);
+				setTimeout(function() { app.alerts = []; }, 10000);
 			}
 		});
 
