@@ -60,15 +60,17 @@
 						<div class="panel panel-weather">
 							<div class="panel-heading">
 								<div class="row">
-									<div class="col-xs-3">
-										<i class="fa fa-cloud fa-5x"></i>
-									</div>
-									<div class="col-xs-9 text-right">
-										<div class="huge">78&deg</div>
-										<div>Atlanta, GA</div>
-										<div>Low 58&deg | High 81&deg</div>
-										<div>Feels like 78&deg | Chance of rain 20%</div>
-									</div>
+									<template v-if="weather.currently">
+										<div class="col-xs-3">
+											<i class="fa fa-cloud fa-5x"></i>
+										</div>
+										<div class="col-xs-9 text-right">
+											<div class="huge">{{weather.currently.temperature}}&deg</div>
+											<div>Atlanta, GA</div>
+											<div>Low {{weather.daily.data[0].temperatureMin}}&deg | High {{weather.daily.data[0].temperatureMax}}&deg</div>
+											<div>Feels like {{weather.currently.apparentTemperature}}&deg | Chance of rain {{weather.currently.precipProbability}}%</div>
+										</div>
+									</template>
 								</div>
 							</div>
 						</div>
@@ -124,7 +126,7 @@
 				setTimeout(function() { app.alerts = []; }, 10000);
 			}
 			else if (data.event.Type == 'SYNC') {
-				
+				app.weather = data.event.Data.Weather;
 			}
 		});
 

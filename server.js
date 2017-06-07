@@ -1,5 +1,6 @@
 var express = require('express'), 
-    sio = require('socket.io')
+    sio = require('socket.io'),
+    eventProcessor = require('./event-processor.js'),
     phoneStatus = require('./phone-utils.js');
 
 
@@ -11,13 +12,12 @@ var io = sio.listen(app);
 
 io.on('connection', function(socket) {
     io.emit('phone-status', { 'phone-status': phoneStatus });
-    console.log('client connected');
 });
 
 app.post('/', function (req, res) {
     var event = req.body;
 
-    io.emit('event', { "event": event });
+    eventProcessor.ProcessEvent(event, io);
 
     res.send('{"Result": "successful"}');
 });
