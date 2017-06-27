@@ -22,9 +22,9 @@ app.post('/', function (req, res) {
     res.send('{"Result": "successful"}');
 });
 
-app.get('/sensor-data', function (req, res) {
-    var zone = req.query.zone;
-    var sensorType = req.query.sensortype;
+app.post('/sensor-data', function (req, res) {
+    var request = req.body;
+    
     res.json({"type": "temperature", "value": "70"});
 })
 
