@@ -24,8 +24,27 @@ app.post('/', function (req, res) {
 
 app.post('/sensor-data', function (req, res) {
     var request = req.body;
-    
-    res.json({"type": "temperature", "value": "70"});
+
+    var temperatureMessage = 'The current temperature in the basement is ' + 70 + ' degrees.'
+
+    var response = {
+        "version": "1.0",
+        "sessionAttributes": {
+            "supportedSensorTypes": {
+                "temperature": true,
+                "humidity": true
+            }
+        },
+        "response": {
+            "outputSpeech": {
+                "type": "PlainText",
+                "text": temperatureMessage
+            },
+            "shouldEndSession": true
+        }
+    };
+
+    res.json(response);
 })
 
 app.listen(process.env.PORT || 3000, function () {
