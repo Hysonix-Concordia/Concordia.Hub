@@ -22,6 +22,12 @@ app.post('/', function (req, res) {
     res.send('{"Result": "successful"}');
 });
 
+app.get('/sensor-data', function (req, res) {
+    var zone = req.query.zone;
+    var sensorType = req.query.sensortype;
+    res.json({"type": "temperature", "value": "70"});
+})
+
 app.listen(process.env.PORT || 3000, function () {
     var addr = app.address();
     console.log('   app listening on http://' + addr.address + ':' + addr.port);
