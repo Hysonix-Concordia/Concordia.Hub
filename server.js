@@ -1,7 +1,8 @@
 var express = require('express'), 
     sio = require('socket.io'),
     eventProcessor = require('./event-processor.js'),
-    phoneStatus = require('./phone-utils.js');
+    phoneStatus = require('./phone-utils.js'),
+    concordiaData = require('./concordia-data.js');
 
 
 var app = express.createServer();
@@ -14,12 +15,17 @@ io.on('connection', function(socket) {
     io.emit('phone-status', { 'phone-status': phoneStatus });
 });
 
+app.get('/', function (req, res) {
+    concordiaData.GetSubscription('5954131f07bf872820b8c9dd');
+    res.send('working');
+});
+
 app.post('/', function (req, res) {
     var event = req.body;
 
     eventProcessor.ProcessEvent(event, io);
 
-    res.send('{"Result": "successful"}');
+    res.json({"Result": "successful"});
 });
 
 app.post('/sensor-data', function (req, res) {
