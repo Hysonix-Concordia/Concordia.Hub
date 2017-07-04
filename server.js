@@ -16,8 +16,9 @@ io.on('connection', function(socket) {
 });
 
 app.get('/', function (req, res) {
-    concordiaData.GetSubscription('5954131f07bf872820b8c9dd');
-    res.send('working');
+    concordiaData.GetSubscription(100000, function(data){
+        res.json(data);
+    });
 });
 
 app.post('/', function (req, res) {
