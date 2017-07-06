@@ -1,4 +1,5 @@
-var express = require('express'), 
+var express = require('express'),
+    path = require('path'), 
     sio = require('socket.io'),
     eventProcessor = require('./event-processor.js'),
     phoneStatus = require('./phone-utils.js'),
@@ -16,9 +17,11 @@ io.on('connection', function(socket) {
 });
 
 app.get('/', function (req, res) {
-    concordiaData.GetSubscription(100000, function(data){
-        res.json(data);
-    });
+    res.sendfile('login.html', {root: './public'});
+});
+
+app.get('/dashboard', function (req, res) {
+    res.sendfile('dashboard.html', {root: './public'});
 });
 
 app.post('/', function (req, res) {
