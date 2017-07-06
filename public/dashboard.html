@@ -6,6 +6,7 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css" />
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
 	<link rel="stylesheet" href="stylesheets/style.css"/>
+	<meta name="google-signin-client_id" content="44733995665-8fjtad14qf3tkvujk4dplsu2s3t8kkii.apps.googleusercontent.com">
 </head>
 <body>
 <div id="app">
@@ -13,7 +14,6 @@
 		<div id="page-wrapper">
 			<div class="container-fluid">
 				<div class="row">
-
 					<div class="col-lg-3 col-md-6">
 						<div class="panel panel-messages">
 							<div class="panel-heading">
@@ -76,7 +76,12 @@
 						</div>
 					</div>
 				</div>	
-			</div>	
+			</div>
+
+
+			<a href="#" onclick="signOut();">Sign out</a>
+
+
 		</div>
 	</div>
 
@@ -93,6 +98,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.3.0/vue.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.2/socket.io.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.16.2/axios.js"></script>
+<script src="https://apis.google.com/js/platform.js?onload=onLoad" async defer></script>
 <script>
 	var app = new Vue({
 		el: '#app',
@@ -131,6 +137,19 @@
 			console.log('disconnected');    
 		});	
 	});
+
+	function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function () {
+			document.location = '/';
+		});
+	}
+
+    function onLoad() {
+      gapi.load('auth2', function() {
+        gapi.auth2.init();
+      });
+    }
 </script>
 </body>
 </html>

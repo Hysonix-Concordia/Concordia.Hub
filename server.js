@@ -1,9 +1,10 @@
 var express = require('express'),
     path = require('path'), 
     sio = require('socket.io'),
-    eventProcessor = require('./event-processor.js'),
+    eventProcessor = require('./custom_modules/event-processor.js'),
     phoneStatus = require('./phone-utils.js'),
-    concordiaData = require('./concordia-data.js');
+    concordiaData = require('./custom_modules/concordia-data.js'),
+    googleAuth = require('./custom_modules/google-auth.js');
 
 
 var app = express.createServer();
@@ -20,8 +21,19 @@ app.get('/', function (req, res) {
     res.sendfile('login.html', {root: './public'});
 });
 
-app.get('/dashboard', function (req, res) {
-    res.sendfile('dashboard.html', {root: './public'});
+app.post('/dashboard', function (req, res) {
+    var id_token = req.body["id-token"];
+    googleAuth.Authenticate(id_token, function(err, login){
+        if (err) {
+            res.sendfile('login.html', {root: './public'});
+            return;
+        }
+
+        var payload = login.getPayload();
+        var userid = payload['sub'];
+
+        res.sendfile('dashboard.html', {root: './public'});
+    });
 });
 
 app.post('/', function (req, res) {
