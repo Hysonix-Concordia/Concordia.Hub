@@ -79,7 +79,7 @@
 			</div>
 
 
-			<a href="#" onclick="signOut();">Sign out</a>
+			<a href="#" v-on:click="signOut">Sign out</a>
 
 
 		</div>
@@ -111,6 +111,12 @@
 		methods: {
 			closeIncomingAlertModal: function () {
 				this.alerts = [];
+			},
+			signOut: function() {
+				var auth2 = gapi.auth2.getAuthInstance();
+				auth2.signOut().then(function () {
+					document.location = '/';
+				});
 			}
 		}
 	});
@@ -137,13 +143,6 @@
 			console.log('disconnected');    
 		});	
 	});
-
-	function signOut() {
-		var auth2 = gapi.auth2.getAuthInstance();
-		auth2.signOut().then(function () {
-			document.location = '/';
-		});
-	}
 
     function onLoad() {
       gapi.load('auth2', function() {
