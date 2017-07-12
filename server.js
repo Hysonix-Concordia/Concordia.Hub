@@ -32,7 +32,9 @@ app.post('/dashboard', function (req, res) {
         var payload = login.getPayload();
         var userid = payload['sub'];
 
-        res.sendfile('dashboard.html', {root: './public'});
+        concordiaData.GetSubscription(payload.email, function(subscription) {
+            res.sendfile('dashboard.html', {root: './public'});
+        });
     });
 });
 

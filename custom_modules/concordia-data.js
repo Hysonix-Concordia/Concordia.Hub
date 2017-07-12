@@ -1,24 +1,41 @@
-var MongoClient = require('mongodb').MongoClient;
+var AWS = require('aws-sdk');
+const uuidv4 = require('uuid/v4');
 
-var url = 'mongodb://concordia:HPvoSD0zxkNWHWbvUFrGxALH7Xs4kxd89WMgdWYWOW4vFzrHNuqAzksSZ8WrtsRKmbP2fWi0xyEUklVzK9lgyQ==@concordia.documents.azure.com:10255/?ssl=true',
-    databaseName = 'concordia';
+var connectToDatabase = function() {
+    AWS.config.loadFromPath('./config.json');
+    return new AWS.DynamoDB({apiVersion: '2012-10-08'});
+},
 
-var connectToDatabase = function(callback) {
-     MongoClient.connect(url, function(err, client) {
-
-        var db = client.db(databaseName);
-
-        callback(db);
-    });
+createSubscription = function(email) {
+    return {
+        TableName: "Subscription",
+        Item:{
+            "Id": { S: uuidv4() },
+            "Email": { S: email }
+        }
+    };
 };
 
 module.exports = {
-    GetSubscription: function(id, callback) {
-        connectToDatabase(function(db){
-            db.collection("subscription").findOne({"id": id.toString()}, function(err, result) {
-                db.close();
-                callback(result);
-            });
+    GetSubscription: function(email, callback) {
+        var conn = connectToDatabase();
+
+        var query = {
+            TableName: 'Subscription',
+            Key: { 'Email' : { S: email } },
+            ProjectionExpression: 'Id'
+        };
+
+        conn.getItem(query, function(err, data) {
+            if(data != null || Object.keys(data).length) {
+                callback(data);
+            }
+            else {
+                var subscription = createSubscription(email);
+                conn.putItem(subscription, function(err, data) {
+                    callback(data);
+                });
+            }
         });
     }
 };
