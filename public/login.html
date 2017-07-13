@@ -18,6 +18,20 @@
     <script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
 
 	<script>
+		var alexaState = '',
+		redirectUrl = '';
+
+		function getQueryVariable(variable)
+		{
+			var query = window.location.search.substring(1);
+			var vars = query.split("&");
+			for (var i=0;i<vars.length;i++) {
+					var pair = vars[i].split("=");
+					if(pair[0] == variable){return pair[1];}
+			}
+			return(false);
+		}
+
 		function renderButton() {
 			gapi.signin2.render('my-signin2', {
 				'scope': 'profile email',
@@ -28,6 +42,7 @@
 				'onsuccess': onSignIn
 			});
 		}
+
 		function onSignIn(googleUser) {
 			var id_token = googleUser.getAuthResponse().id_token;
 
@@ -41,8 +56,30 @@
 			token_field.setAttribute("value", id_token);
 			form.appendChild(token_field);
 
+			if(alexaState != '') {
+				var alexastate_field = document.createElement("input");
+				alexastate_field.setAttribute("type", "hidden");
+				alexastate_field.setAttribute("name", "alexa-state");
+				alexastate_field.setAttribute("value", alexaState);
+				form.appendChild(alexastate_field);
+
+				var alexaredirecturl_field = document.createElement("input");
+				alexaredirecturl_field.setAttribute("type", "hidden");
+				alexaredirecturl_field.setAttribute("name", "alexa-redirecturl");
+				alexaredirecturl_field.setAttribute("value", redirectUrl);
+				form.appendChild(alexaredirecturl_field);
+			}
+
 			document.body.appendChild(form);
 			form.submit();
 		}
+
+		(function() {
+			var authType = getQueryVariable("auth");
+			if(authType && authType == 'alexa') {
+				alexaState = getQueryVariable("state");
+				redirectUrl = getQueryVariable("redirect_uri");
+			}
+		})();
 	</script>
 </body>
