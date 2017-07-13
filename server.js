@@ -35,7 +35,7 @@ app.post('/dashboard', function (req, res) {
 
         concordiaData.GetSubscription(payload.email, function(subscription) {
             if(alexa_state && alexa_state != '') {
-                var url = decodeURIComponent(alexa_redirecturl + '?state=' + alexa_state + '&code=' + subscription.Item.Id.S);
+                var url = decodeURIComponent(alexa_redirecturl + '#state=' + alexa_state + '&code=' + subscription.Item.Id.S);
                 res.redirect(url);
             }
             else {
