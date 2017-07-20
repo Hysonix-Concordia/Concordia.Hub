@@ -50,9 +50,9 @@ module.exports = {
         });
     },
 
-    CreateDevice: function(subscriptionID, deviceName, callback) {
+    CreateDevice: function(subscriptionId, deviceName, callback) {
         var conn = connectToDatabase();
-        var device = CreateDevice(subscriptionID, deviceName);
+        var device = CreateDevice(subscriptionId, deviceName);
         conn.putItem(device, function(err, data) {
             callback(data);
         });

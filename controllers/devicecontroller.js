@@ -4,8 +4,9 @@ module.exports = {
     Start: function(app) {
         app.post('/register', function (req, res) {
             var request = req.body;
-
-            res.json({});
+            concordiaData.CreateDevice(request.SubscriptionId, request.deviceName, function(data) {
+                res.json(data);
+            });
         });
 
         app.post('/sensor-data', function (req, res) {
