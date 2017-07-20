@@ -1,82 +1,13 @@
 var express = require('express'),
-    path = require('path'), 
-    sio = require('socket.io'),
-    eventProcessor = require('./custom_modules/event-processor.js'),
-    phoneStatus = require('./phone-utils.js'),
-    concordiaData = require('./custom_modules/concordia-data.js'),
-    googleAuth = require('./custom_modules/google-auth.js');
+    path = require('path'),
+    router = require('./router.js');
 
 
 var app = express.createServer();
 app.use(express.bodyParser());
 app.use(express.static(__dirname + '/public'));
 
-var io = sio.listen(app);
-
-io.on('connection', function(socket) {
-    io.emit('phone-status', { 'phone-status': phoneStatus });
-});
-
-app.get('/', function (req, res) {
-    res.sendfile('login.html', {root: './public'});
-});
-
-app.post('/dashboard', function (req, res) {
-    var id_token = req.body["id-token"];
-    var alexa_state = req.body["alexa-state"];
-    var alexa_redirecturl = req.body["alexa-redirecturl"];
-    googleAuth.Authenticate(id_token, function(err, login){
-        if (err) {
-            res.sendfile('login.html', {root: './public'});
-            return;
-        }
-
-        var payload = login.getPayload();
-
-        concordiaData.GetSubscription(payload.email, function(subscription) {
-            if(alexa_state && alexa_state != '') {
-                var url = decodeURIComponent(alexa_redirecturl + '#state=' + alexa_state + '&access_token=' + subscription.Item.Id.S + '&token_type=Bearer');
-                res.redirect(url);
-            }
-            else {
-                res.sendfile('dashboard.html', {root: './public'});
-            }
-        });
-    });
-});
-
-app.post('/', function (req, res) {
-    var event = req.body;
-
-    eventProcessor.ProcessEvent(event, io);
-
-    res.json({"Result": "successful"});
-});
-
-app.post('/sensor-data', function (req, res) {
-    var request = req.body;
-
-    var temperatureMessage = 'The current temperature in the basement is ' + 70 + ' degrees.'
-
-    var response = {
-        "version": "1.0",
-        "sessionAttributes": {
-            "supportedSensorTypes": {
-                "temperature": true,
-                "humidity": true
-            }
-        },
-        "response": {
-            "outputSpeech": {
-                "type": "PlainText",
-                "text": temperatureMessage
-            },
-            "shouldEndSession": true
-        }
-    };
-
-    res.json(response);
-})
+router.Start(app);
 
 app.listen(process.env.PORT || 3000, function () {
     var addr = app.address();

@@ -14,7 +14,18 @@ createSubscription = function(email) {
             "Email": { S: email }
         }
     };
-};
+},
+
+createDevice = function(subscriptionId, name) {
+    return {
+        TableName: "Device",
+        Item:{
+            "Id": { S: uuidv4() },
+            "SubscriptionId": { S: subscriptionId },
+            "Name": { S: name },
+        }
+    };
+};;
 
 module.exports = {
     GetSubscription: function(email, callback) {
@@ -36,6 +47,14 @@ module.exports = {
                     callback(data);
                 });
             }
+        });
+    },
+
+    CreateDevice: function(subscriptionID, deviceName, callback) {
+        var conn = connectToDatabase();
+        var device = CreateDevice(subscriptionID, deviceName);
+        conn.putItem(device, function(err, data) {
+            callback(data);
         });
     }
 };
