@@ -25,7 +25,7 @@ createDevice = function(subscriptionId, name) {
             "Name": { S: name },
         }
     };
-};;
+};
 
 module.exports = {
     GetSubscription: function(email, callback) {
