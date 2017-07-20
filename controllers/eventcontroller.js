@@ -3,7 +3,7 @@ var eventProcessor = require('../custom_modules/event-processor.js'),
 
 module.exports = {
     Start: function(app, io) {
-        app.post('/', function (req, res) {
+        app.post('/event', function (req, res) {
             var event = req.body;
 
             eventProcessor.ProcessEvent(event, io);

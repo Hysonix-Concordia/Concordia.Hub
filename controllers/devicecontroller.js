@@ -2,7 +2,7 @@ var concordiaData = require('../custom_modules/concordia-data.js');
 
 module.exports = {
     Start: function(app) {
-        app.post('/register', function (req, res) {
+        app.post('/device/register', function (req, res) {
             var request = req.body;
             concordiaData.CreateDevice(request.SubscriptionId, request.deviceName, function(data) {
                 res.json(data);

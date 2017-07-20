@@ -13,5 +13,7 @@ module.exports = {
         eventcontroller.Start(app, io);
 
         dashboardcontroller.Start(app);
+
+        devicecontroller.Start(app);
     }
 };
