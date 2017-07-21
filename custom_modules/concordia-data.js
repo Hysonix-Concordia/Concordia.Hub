@@ -52,9 +52,16 @@ module.exports = {
 
     RegisterDevice: function(subscriptionId, deviceName, callback) {
         var conn = connectToDatabase();
+
         var device = createDevice(subscriptionId, deviceName);
+
         conn.putItem(device, function(err, data) {
-            callback(device.Item.Id.S);
+            if(err) {
+                callback(err);
+            }
+            else {
+                callback({ "DeviceId": device.Item.Id.S });
+            }
         });
     }
 };
