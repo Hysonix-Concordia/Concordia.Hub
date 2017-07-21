@@ -9,7 +9,7 @@ module.exports = {
             });
         });
 
-        app.post('device/sensor-data', function (req, res) {
+        app.post('/device/sensor-data', function (req, res) {
             var request = req.body;
 
             var temperatureMessage = 'The current temperature in the basement is ' + 70 + ' degrees.'
