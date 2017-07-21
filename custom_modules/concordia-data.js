@@ -54,7 +54,7 @@ module.exports = {
         var conn = connectToDatabase();
         var device = createDevice(subscriptionId, deviceName);
         conn.putItem(device, function(err, data) {
-            callback(device);
+            callback(device.Item.Id.S);
         });
     }
 };

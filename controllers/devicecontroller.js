@@ -5,11 +5,11 @@ module.exports = {
         app.post('/device/register', function (req, res) {
             var request = req.body;
             concordiaData.RegisterDevice(request.SubscriptionId, request.DeviceName, function(data) {
-                res.json(data);
+                res.json({ "DeviceId": data });
             });
         });
 
-        app.post('/sensor-data', function (req, res) {
+        app.post('device/sensor-data', function (req, res) {
             var request = req.body;
 
             var temperatureMessage = 'The current temperature in the basement is ' + 70 + ' degrees.'
