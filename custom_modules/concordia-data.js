@@ -57,10 +57,10 @@ module.exports = {
 
         conn.putItem(device, function(err, data) {
             if(err) {
-                callback(err);
+                callback({}, err);
             }
             else {
-                callback({ "DeviceId": device.Item.Id.S });
+                callback({ "DeviceId": device.Item.Id.S }, null);
             }
         });
     }
