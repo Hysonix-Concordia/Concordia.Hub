@@ -2,7 +2,8 @@ var sio = require('socket.io'),
     logincontroller = require("./controllers/logincontroller.js"),
     eventcontroller = require("./controllers/eventcontroller.js"),
     dashboardcontroller = require("./controllers/dashboardcontroller.js"),
-    devicecontroller = require("./controllers/devicecontroller.js");
+    devicecontroller = require("./controllers/devicecontroller.js"),
+    avrcontroller = require("./controllers/avrcontroller.js");
 
 module.exports = {
     Start: function(app) {
@@ -15,5 +16,7 @@ module.exports = {
         dashboardcontroller.Start(app);
 
         devicecontroller.Start(app);
+
+        avrcontroller.Start(app);
     }
 };
