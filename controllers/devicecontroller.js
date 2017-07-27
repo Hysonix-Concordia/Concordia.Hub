@@ -15,26 +15,7 @@ module.exports = {
         app.post('/device/sensor-data', function (req, res) {
             var request = req.body;
 
-            var temperatureMessage = 'The current temperature in the basement is ' + 70 + ' degrees.'
-
-            var response = {
-                "version": "1.0",
-                "sessionAttributes": {
-                    "supportedSensorTypes": {
-                        "temperature": true,
-                        "humidity": true
-                    }
-                },
-                "response": {
-                    "outputSpeech": {
-                        "type": "PlainText",
-                        "text": temperatureMessage
-                    },
-                    "shouldEndSession": true
-                }
-            };
-
-            res.json(response);
+            res.send("SUCCESSFUL:" + data.DeviceId);
         });
     }
 };
