@@ -12,10 +12,14 @@ module.exports = {
             });
         });
 
-        app.post('/device/sensor-data', function (req, res) {
+        app.post('/device/data', function (req, res) {
             var request = req.body;
-
-            res.send("SUCCESSFUL:" + data.DeviceId);
+            concordiaData.SaveDeviceData(request.DeviceId, request.SensorType, request.Data, function(data, err){
+                if(err) {
+                    res.send("ERROR:" + JSON.stringify(err));
+                }
+                res.send("SUCCESSFUL");
+            });
         });
     }
 };

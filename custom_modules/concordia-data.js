@@ -25,6 +25,17 @@ createDevice = function(subscriptionId, name) {
             "Name": { S: name },
         }
     };
+},
+
+createDeviceData = function(deviceId, sensorType, sensorData) {
+    return {
+        TableName: "DeviceData",
+        Item:{
+            "DeviceId":  deviceId,
+            "SensorType": sensorType,
+            "Value": sensorData,
+        }
+    };
 };
 
 module.exports = {
@@ -53,6 +64,7 @@ module.exports = {
     RegisterDevice: function(subscriptionId, deviceName, callback) {
         var conn = connectToDatabase();
 
+        AWS.config.loadFromPath('./config.json');
         var device = createDevice(subscriptionId, deviceName);
 
         conn.putItem(device, function(err, data) {
@@ -61,6 +73,23 @@ module.exports = {
             }
             else {
                 callback({ "DeviceId": device.Item.Id.S }, null);
+            }
+        });
+    },
+
+    SaveDeviceData: function(deviceId, sensorType, data, callback) {
+        var conn = connectToDatabase();
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+
+        var device = createDeviceData(deviceId, sensorType, data);
+
+        docClient.put(device, function(err, data) {
+            if(err) {
+                callback({}, err);
+            }
+            else {
+                callback({ "Result": "Success" }, null);
             }
         });
     }
