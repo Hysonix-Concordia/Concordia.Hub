@@ -1,3 +1,6 @@
+#AWS configuration
+awsconfig.json
+
 # Logs
 logs
 *.log

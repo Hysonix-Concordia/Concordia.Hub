@@ -2,7 +2,7 @@ var AWS = require('aws-sdk');
 const uuidv4 = require('uuid/v4');
 
 var connectToDatabase = function() {
-    AWS.config.loadFromPath('./config.json');
+    AWS.config.loadFromPath('./awsconfig.json');
     return new AWS.DynamoDB({apiVersion: '2012-10-08'});
 },
 
@@ -63,8 +63,7 @@ module.exports = {
 
     RegisterDevice: function(subscriptionId, deviceName, callback) {
         var conn = connectToDatabase();
-
-        AWS.config.loadFromPath('./config.json');
+        
         var device = createDevice(subscriptionId, deviceName);
 
         conn.putItem(device, function(err, data) {
