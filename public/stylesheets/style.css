@@ -1,8 +1,4 @@
 
-body {
-    background-color: #ddd;
-}
-
 .centered {
     /* Must set width and height */
     position:absolute; /*it can be fixed too*/
@@ -19,13 +15,24 @@ body {
 
 .login {
     width: 600px;
-    height: 400px;
+    height: 500px;
+    border-radius: 10px;
+    background-color: #FFF;
+    border: solid 1px #BBB;
+}
+
+.navbar-default {
+    background-color: #FFF;
+}
+
+.navbar-brand {
+    height: auto; 
+    padding: 0px 0px; 
 }
 
 .abcRioButton.abcRioButtonBlue { margin: 0 auto;}
 
 #page-wrapper {
-    margin-top: 10px;
 }
 
 .panel-messages {
