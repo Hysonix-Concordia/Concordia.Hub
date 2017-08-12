@@ -16,13 +16,13 @@ createSubscription = function(email) {
     };
 },
 
-createDevice = function(subscriptionId, name) {
+createDevice = function(subscriptionId, zone) {
     return {
         TableName: "Device",
         Item:{
             "Id": { S: uuidv4() },
             "SubscriptionId": { S: subscriptionId },
-            "Name": { S: name },
+            "Zone": { S: zone },
         }
     };
 },
@@ -32,8 +32,9 @@ createDeviceData = function(deviceId, sensorType, sensorData) {
         TableName: "DeviceData",
         Item:{
             "DeviceId":  deviceId,
+            "CreateDate": Date.now(),
             "SensorType": sensorType,
-            "Value": sensorData,
+            "Data": sensorData,
         }
     };
 };
@@ -61,10 +62,10 @@ module.exports = {
         });
     },
 
-    RegisterDevice: function(subscriptionId, deviceName, callback) {
+    RegisterDevice: function(subscriptionId, zone, callback) {
         var conn = connectToDatabase();
         
-        var device = createDevice(subscriptionId, deviceName);
+        var device = createDevice(subscriptionId, zone);
 
         conn.putItem(device, function(err, data) {
             if(err) {
@@ -90,6 +91,54 @@ module.exports = {
             else {
                 callback({ "Result": "Success" }, null);
             }
+        });
+    },
+
+    GetDevices: function(subscriptionId, zone, callback) {
+        var conn = connectToDatabase();
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+
+        var params = {
+            ExpressionAttributeNames: {
+                "#DeviceZone": "Zone"
+            }, 
+            ExpressionAttributeValues: {
+                ":subscriptionId": subscriptionId
+            }, 
+            FilterExpression: "SubscriptionId = :subscriptionId", 
+            ProjectionExpression: "Id, SubscriptionId, #DeviceZone", 
+            TableName: "Device"
+        };
+
+        docClient.scan(params, function(err, data){
+            callback(data.Items, err);
+        });
+
+    },
+
+    GetDeviceData: function(deviceId, sensorType, recordCount, callback) {
+        var conn = connectToDatabase();
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+
+        var params = {
+            TableName:"DeviceData",
+            KeyConditionExpression:"#deviceId = :deviceId",//"#sensorType = :sensorType",
+            ExpressionAttributeNames: {
+                "#deviceId":"DeviceId",
+                //"#sensorType":"SensorType"
+            },
+            ExpressionAttributeValues: {
+                ":deviceId":deviceId,
+                //":sensorType":sensorType
+            },
+            Limit: recordCount,
+            ScanIndexForward: false
+        };
+
+        docClient.query(params, function(err, data){
+            callback(data.Items, err);
         });
     }
 };
